@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <Button
+        android:id="@+id/main_call_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#3F51B5"
+        android:textColor="@color/colorWhite"
+        android:fontFamily="@font/font_style"
+        style="@style/DefaultTextViewStyle"
+        android:onClick="onClickListener"
+        android:text="대기 고객 호출"/>
+    <Button
+        android:id="@+id/main_customer_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorBlue"
+        style="@style/DefaultTextViewStyle"
+        android:textStyle="bold"
+        android:onClick="onClickListener"
+        android:text="대기 번호 발급"/>
+
+    <Button
+        android:id="@+id/main_manage_button"
+        style="@style/DefaultTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#03A9F4"
+        android:onClick="onClickListener"
+        android:text="고객 관리" />
+</LinearLayout>

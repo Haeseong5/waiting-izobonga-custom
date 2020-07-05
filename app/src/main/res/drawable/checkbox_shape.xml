@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Unchecked -->
+    <item android:state_checked="false">
+        <shape>
+            <stroke android:color="#c4cbd2" android:width="1dp" />
+            <corners android:radius="4dp" />
+            <solid android:color="#fff" />
+        </shape>
+    </item>
+    <!-- Checked -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- 배경 -->
+            <item>
+                <shape>
+                    <corners android:radius="4dp" />
+                    <solid android:color="@color/colorBlue" />
+                </shape>
+            </item>
+<!--             이미지 영역-->
+            <item android:drawable="@drawable/ic_check_foreground" android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+        </layer-list>
+    </item>
+</selector>
+
+
+<!--    &lt;!&ndash; 배경 &ndash;&gt;-->
+<!--<item>-->
+<!--&lt;!&ndash;                <shape>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <corners android:radius="4dp" />&ndash;&gt;-->
+<!--&lt;!&ndash;                    <solid android:color="@color/colorBlue" />&ndash;&gt;-->
+<!--&lt;!&ndash;                </shape>&ndash;&gt;-->
+<!--</item>-->
+<!--    &lt;!&ndash;             이미지 영역&ndash;&gt;-->
+<!--<item android:drawable="@drawable/ic_check_foreground" android:top="4dp" android:right="4dp" android:bottom="4dp" android:left="4dp" />-->
+<!--    </layer-list>-->
