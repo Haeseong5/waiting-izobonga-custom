@@ -2,6 +2,7 @@ package com.haeseong.izobonga_custom.views.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,28 +18,29 @@ import com.haeseong.izobonga_custom.R;
 import java.util.Objects;
 
 public class PersonnelDialog extends Dialog {
-    private ImageView mIvPlus, mIvMinus;
-    public TextView mTvNumber, mTvTitle, mTvSubTitle;
+    private ImageView mIvPlus, mIvMinus, mIvTitle;
+    public TextView mTvNumber;
     private Button mBtnPrevious, mBtnNext;
     private View.OnClickListener nextButtonListener;
     private View.OnClickListener preButtonListener;
+    private Drawable drawable;
 //    private View.OnClickListener plusListener;
 //    private View.OnClickListener minusListener;
-
-    private String mTitle;
-    private String mSubTitle;
+//    private String mTitle;
+//    private String mSubTitle;
 
     public PersonnelDialog(@NonNull Context context,
                            View.OnClickListener positiveListener, View.OnClickListener preButtonListener,
 //                           View.OnClickListener plusListener, View.OnClickListener minusListener,
-                           String title, String sub) {
+                           Drawable drawable) {
         super(context);
         this.nextButtonListener = positiveListener;
         this.preButtonListener = preButtonListener;
+        this.drawable = drawable;
 //        this.plusListener = plusListener;
 //        this.minusListener = minusListener;
-        this.mTitle = title;
-        this.mSubTitle = sub;
+//        this.mTitle = title;
+//        this.mSubTitle = sub;
     }
 
     @Override
@@ -60,12 +62,9 @@ public class PersonnelDialog extends Dialog {
         mTvNumber = findViewById(R.id.child_number);
         mBtnPrevious = findViewById(R.id.personnel_previous);
         mBtnNext = findViewById(R.id.personnel_next);
-        mTvTitle = findViewById(R.id.personnel_dialog_tv_title);
-        mTvSubTitle = findViewById(R.id.personnel_dialog_tv_sub_title);
+        mIvTitle = findViewById(R.id.personnel_dialog_iv_title);
 
-        mTvTitle.setText(mTitle);
-        mTvSubTitle.setText(mSubTitle);
-
+        mIvTitle.setImageDrawable(drawable);
         mIvPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

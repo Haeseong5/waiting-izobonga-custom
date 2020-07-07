@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="activity"
@@ -12,7 +11,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ImageView
             android:id="@+id/waiting_iv_background"
             android:layout_width="match_parent"
@@ -20,7 +18,6 @@
             android:layout_gravity="center"
             android:background="#F5DFDF"
             android:scaleType="center" />
-
         <LinearLayout
             android:layout_width="200dp"
             android:layout_height="200dp"
@@ -50,12 +47,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@color/colorFadedJade"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/waiting_et_number_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="010-"
                 android:maxLines="1"
                 android:maxLength="13"/>
 
@@ -93,7 +92,7 @@
                         android:id="@+id/btn1"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn1_click_seletor"
+                        android:src="@drawable/btn1_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -139,7 +138,7 @@
                         android:id="@+id/btn6"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn6_click_seletor"
+                        android:src="@drawable/btn6_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -153,7 +152,7 @@
                         android:id="@+id/btn7"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn7_click_seletor"
+                        android:src="@drawable/btn7_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -161,7 +160,7 @@
                         android:id="@+id/btn8"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn8_click_seletor"
+                        android:src="@drawable/btn8_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -169,7 +168,7 @@
                         android:id="@+id/btn9"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn9_click_seletor"
+                        android:src="@drawable/btn9_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -183,7 +182,7 @@
                         android:id="@+id/btn_cancel"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn_cancel_click_seletor"
+                        android:src="@drawable/btn_cancel_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
@@ -199,7 +198,7 @@
                         android:id="@+id/btn_input"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/btn_input_click_seletor"
+                        android:src="@drawable/btn_input_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>

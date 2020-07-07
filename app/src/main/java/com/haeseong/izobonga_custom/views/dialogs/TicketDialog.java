@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,9 @@ import com.haeseong.izobonga_custom.R;
 
 public class TicketDialog extends Dialog {
 
-    private Button mPositiveButton;
+    private ImageView mPositiveButton;
+    private ImageView mIvTitle;
+
     private TextView tvWaitingNumber;
     private int mTicket;
 
@@ -34,7 +37,8 @@ public class TicketDialog extends Dialog {
 
         setContentView(R.layout.dialog_ticket);
         tvWaitingNumber = findViewById(R.id.waiting_dialog_number);
-        mPositiveButton = findViewById(R.id.waiting_dialog_finish_button);
+        mPositiveButton = findViewById(R.id.waiting_dialog_finish);
+        mIvTitle = findViewById(R.id.waiting_dialog_title);
         String ticket = String.valueOf(mTicket);
         tvWaitingNumber.setText(ticket);
         mPositiveButton.setOnClickListener(mPositiveListener);

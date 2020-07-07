@@ -10,45 +10,32 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/check_dialog_tv_title"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:fontFamily="@font/font_style"
-            android:text="@string/check_call_title"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/dialog_ticket_text"/>
+        <TextView
+            android:id="@+id/waiting_dialog_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="99"
+            android:textSize="80sp"
             android:textStyle="bold"
             android:textColor="@color/colorBlack"
-            android:layout_marginVertical="20dp"/>
-        <TextView
-            android:id="@+id/check_dialog_tv_sub_title"
+            android:layout_marginVertical="10dp"/>
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:text="@string/check_call_subtitle"
-            android:textColor="@color/colorBlue"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginHorizontal="10dp"
+            android:src="@drawable/dialog_ticket_sub_text"/>
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/colorBlue"
-        android:gravity="center_vertical">
-        <Button
-            android:id="@+id/check_bt_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:layout_marginHorizontal="20dp"
-            android:text="취소"/>
-        <Button
-            android:id="@+id/check_bt_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:layout_marginHorizontal="20dp"
-            android:layout_alignParentEnd="true"
-            android:text="확인" />
+    <ImageView
+        android:id="@+id/check_iv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/dialog_finish"/>
 
-    </RelativeLayout>
 </LinearLayout>

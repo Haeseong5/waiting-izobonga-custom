@@ -41,9 +41,7 @@ public class CheckDialog extends Dialog {
         setCancelable(false);
 
         //initView
-        tvTitle = findViewById(R.id.check_dialog_tv_title);
-        tvSub = findViewById(R.id.check_dialog_tv_sub_title);
-        btCancel = findViewById(R.id.check_bt_cancel);
-        btCheck = findViewById(R.id.check_bt_check);
+//        btCancel = findViewById(R.id.check_iv_cancel);
+//        btCheck = findViewById(R.id.check_bt_check);
     }
 }

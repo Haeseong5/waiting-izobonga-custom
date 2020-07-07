@@ -151,7 +151,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
 
     private void showTotalDialog(){
         if (mTotalDialog == null) {
-            mTotalDialog = new PersonnelDialog(WaitingActivity.this, personnelNextListener, totalPreListener, getString(R.string.dialog_title), getString(R.string.dialog_sub_title));
+            mTotalDialog = new PersonnelDialog(WaitingActivity.this, personnelNextListener, totalPreListener, getDrawable(R.drawable.adult_dialog_text));
             mTotalDialog.setCancelable(false);
             mTotalDialog.setCanceledOnTouchOutside(false);
         }
@@ -159,7 +159,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     }
     private void showChildDialog(){
         if (mChildDialog == null){
-            mChildDialog = new PersonnelDialog(WaitingActivity.this, childNextListener, childPreListener, getString(R.string.child_dialog_title), getString(R.string.child_dialog_sub_title));
+            mChildDialog = new PersonnelDialog(WaitingActivity.this, childNextListener, childPreListener, getDrawable(R.drawable.child_dialog_text));
             mChildDialog.setCancelable(false);
             mChildDialog.setCanceledOnTouchOutside(false);
         }
