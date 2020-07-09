@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 
 import com.haeseong.izobonga_custom.R;
 
+import java.util.Objects;
+
 public class TicketDialog extends Dialog {
 
     private ImageView mPositiveButton;
@@ -33,7 +35,7 @@ public class TicketDialog extends Dialog {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount = 0.8f;
-        getWindow().setAttributes(layoutParams);
+        Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         setContentView(R.layout.dialog_ticket);
         tvWaitingNumber = findViewById(R.id.waiting_dialog_number);

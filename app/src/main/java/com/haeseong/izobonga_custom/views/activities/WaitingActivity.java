@@ -27,7 +27,6 @@ import java.util.Locale;
 
 public class WaitingActivity extends BaseActivity implements WaitingActivityView {
     private final String TAG = WaitingActivity.class.getName();
-
     FireBaseHelper firebaseHelper;
     ActivityWaitingBinding binding;
     ArrayList<String> numbers;
@@ -35,7 +34,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     PersonnelDialog mTotalDialog, mChildDialog;
     TableDialog mTableDialog;
     public TextToSpeech tts;
-
+    int table4, table6;
     int mChild;
     int mTotal;
     @Override
@@ -104,7 +103,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     private View.OnClickListener childNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             mChild = Integer.parseInt(mChildDialog.mTvNumber.getText().toString());
-            if (mTotal>4){
+            if (mTotal+mChild>4){
                 showTableDialog();
             }else{
                 showProgressDialog();
@@ -115,10 +114,13 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
 
     private View.OnClickListener tableNextListener = new View.OnClickListener() {
         public void onClick(View v) {
-            showProgressDialog();
-
-            boolean table = mTableDialog.cbTable6.isChecked();
-            tryWaiting(mTotal, mChild, table);
+            if (mTableDialog.cbTable4.isChecked() || mTableDialog.cbTable6.isChecked()){
+                showProgressDialog();
+                boolean table = mTableDialog.cbTable6.isChecked();
+                tryWaiting(mTotal, mChild, table);
+            } else{
+                printToast("테이블을 선택해주세요!");
+            }
         }
     };
 
@@ -167,9 +169,12 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     }
     private void showTableDialog(){
         if (mTableDialog == null){
-            mTableDialog = new TableDialog(WaitingActivity.this, tableNextListener, tablePreListener);
+            mTableDialog = new TableDialog(WaitingActivity.this, tableNextListener, tablePreListener, table4, table6);
             mTableDialog.setCancelable(false);
             mTableDialog.setCanceledOnTouchOutside(false);
+        }else{
+            mTableDialog.mTvTable4.setText(String.valueOf(table4));
+            mTableDialog.mTvTable6.setText(String.valueOf(table6));
         }
         mTableDialog.show();
     }
@@ -275,9 +280,12 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     }
 
     @Override
-    public void modified(long size) {
+    public void modified(long size, int table4, int table6) {
         binding.waitingCountText.setText(size + "팀");
+        this.table4 = table4;
+        this.table6 = table6;
     }
+
 
     @Override
     public void speak(String ticket) {

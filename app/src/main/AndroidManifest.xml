@@ -16,10 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.haeseong.izobonga_custom.views.activities.GifActivity"
-            android:screenOrientation="landscape"
-            >
-        </activity>
         <activity android:name="com.haeseong.izobonga_custom.views.activities.ManagerActivity" />
         <activity android:name="com.haeseong.izobonga_custom.views.activities.CallActivity" />
         <activity

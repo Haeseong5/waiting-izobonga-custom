@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="400dp"
+    android:layout_width="500dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center_horizontal">
@@ -35,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="100sp"
+            android:gravity="center"
+            android:textSize="100dp"
             android:textStyle="bold"
             android:textColor="@color/colorBlack"
             android:layout_marginHorizontal="40dp"/>
@@ -43,13 +44,13 @@
             android:id="@+id/child_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_right_selector"
-            />
+            android:src="@drawable/btn_right_selector" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginHorizontal="5dp"
         android:gravity="center_vertical">
         <Button
             android:id="@+id/personnel_previous"
@@ -62,6 +63,5 @@
             android:layout_height="wrap_content"
             android:background="@drawable/dialog_next"
             android:layout_alignParentEnd="true" />
-
     </RelativeLayout>
 </LinearLayout>
