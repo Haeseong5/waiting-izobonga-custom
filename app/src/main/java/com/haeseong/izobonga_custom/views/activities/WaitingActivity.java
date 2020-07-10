@@ -2,13 +2,13 @@ package com.haeseong.izobonga_custom.views.activities;
 
 import androidx.databinding.DataBindingUtil;
 
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.haeseong.izobonga_custom.BaseActivity;
@@ -24,6 +24,8 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WaitingActivity extends BaseActivity implements WaitingActivityView {
     private final String TAG = WaitingActivity.class.getName();
@@ -37,6 +39,13 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     int table4, table6;
     int mChild;
     int mTotal;
+
+    //타이머
+    Handler mHandler = new Handler();
+    int mCounter =0;
+    static TimerTask mTimerTask;
+    Timer mTimer = new Timer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +59,21 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
 
         firebaseHelper = new FireBaseHelper();
         setWaitingListener(); //FireStore Change Listener
+        numbers = new ArrayList<>();
+
         binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
         binding.waitingEtNumberBox.setEnabled(false); //editText 사용 불가능하게 만들기
         binding.waitingEtNumberBox.setFocusable(false);
-        numbers = new ArrayList<>();
+
+        //현재 웨이팅만 띄우고 키패드 숨기기
+        binding.waitingCountLayout.setVisibility(View.VISIBLE);
+        binding.keyPadLayout.setVisibility(View.GONE);
 
         binding.setClickCallback(clickListener);
+
+//        //타이머 생성
+        mTimerTask = timerTaskMaker();
+        mTimer.schedule(mTimerTask, 0, 3000);
 
         if (tts == null){
             tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -65,7 +83,6 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                 }
             });
         }
-
     }
 
     private void tryWaiting(int personnelNumber, int childNumber, boolean table6){
@@ -83,17 +100,22 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mTicketDialog = null;
             binding.waitingEtNumberBox.setText("010-");
             binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
+            binding.keyPadLayout.setVisibility(View.VISIBLE);
+            //타이머재생성
+            mTimerTask = timerTaskMaker();
+            mTimer.schedule(mTimerTask, 0, 3000);
         }
     };
 
     //총 인원 수 선택 Dialog 다음 버튼 클릭 시 이벤트 처리
-    private View.OnClickListener personnelNextListener = new View.OnClickListener() {
+    private View.OnClickListener adultNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             String personnelNumber = mTotalDialog.mTvNumber.getText().toString();
             mTotal = Integer.parseInt(personnelNumber);
             if ( mTotal < 2){
                 printToast("2인 이상부터 예약 가능합니다,");
             }else {
+                mTotalDialog.hide();
                 showChildDialog();
             }
         }
@@ -104,6 +126,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         public void onClick(View v) {
             mChild = Integer.parseInt(mChildDialog.mTvNumber.getText().toString());
             if (mTotal+mChild>4){
+                mChildDialog.hide();
                 showTableDialog();
             }else{
                 showProgressDialog();
@@ -116,6 +139,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         public void onClick(View v) {
             if (mTableDialog.cbTable4.isChecked() || mTableDialog.cbTable6.isChecked()){
                 showProgressDialog();
+                mTableDialog.hide();
                 boolean table = mTableDialog.cbTable6.isChecked();
                 tryWaiting(mTotal, mChild, table);
             } else{
@@ -130,15 +154,19 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             if (mTotalDialog != null){
                 mTotalDialog.dismissDialog();
             }
+            binding.keyPadLayout.setVisibility(View.VISIBLE);
+            //타이머재생성
+            mTimerTask = timerTaskMaker();
+            mTimer.schedule(mTimerTask, 0, 3000);
         }
     };
 
     //아동 인원 수 선택 Dialog 다음, 이전 클릭 시 이벤트 처리
     private View.OnClickListener childPreListener = new View.OnClickListener() {
         public void onClick(View v) {
-            mChild = 0;
             if (mChildDialog != null && mChildDialog.isShowing()){
                 mChildDialog.dismissDialog();
+                mTotalDialog.show();
             }
         }
     };
@@ -147,16 +175,20 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         public void onClick(View v) {
             if (mTableDialog != null && mTableDialog.isShowing()){
                 mTableDialog.dismissDialog();
+                mChildDialog.show();
             }
         }
     };
 
     private void showTotalDialog(){
         if (mTotalDialog == null) {
-            mTotalDialog = new PersonnelDialog(WaitingActivity.this, personnelNextListener, totalPreListener, getDrawable(R.drawable.adult_dialog_text));
+            mTotalDialog = new PersonnelDialog(WaitingActivity.
+                    this, adultNextListener, totalPreListener, getDrawable(R.drawable.adult_dialog_text));
             mTotalDialog.setCancelable(false);
             mTotalDialog.setCanceledOnTouchOutside(false);
+            mTotalDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
         }
+        mTotal = 0;
         mTotalDialog.show();
     }
     private void showChildDialog(){
@@ -164,12 +196,15 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mChildDialog = new PersonnelDialog(WaitingActivity.this, childNextListener, childPreListener, getDrawable(R.drawable.child_dialog_text));
             mChildDialog.setCancelable(false);
             mChildDialog.setCanceledOnTouchOutside(false);
+            mChildDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
         }
+        mChild = 0;
         mChildDialog.show();
     }
     private void showTableDialog(){
         if (mTableDialog == null){
             mTableDialog = new TableDialog(WaitingActivity.this, tableNextListener, tablePreListener, table4, table6);
+            mTableDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
             mTableDialog.setCancelable(false);
             mTableDialog.setCanceledOnTouchOutside(false);
         }else{
@@ -181,6 +216,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     private void showTicketDialog(int ticket){
         if (mTicketDialog == null){
             mTicketDialog = new TicketDialog(WaitingActivity.this, ticketListener, ticket);
+            mTicketDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
             mTicketDialog.setCancelable(false);
             mTicketDialog.setCanceledOnTouchOutside(false);
         }
@@ -193,11 +229,11 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     }
 
 
-
     //NumberKeyPad ClickListener
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            mCounter = 0;
             if(v == null)
                 return;
             switch(v.getId()) {
@@ -244,7 +280,8 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                         if(phoneNumber.length() != 13){
                             printToast("잘 못된 휴대폰 번호입니다. 다시 입력해주세요.");
                         }else{
-                            //request server(폰번호);
+                            binding.keyPadLayout.setVisibility(View.GONE);
+                            mTimerTask.cancel(); //다이어로그 출력전 타이머 정지
                             showTotalDialog();
                         }
                     }else{
@@ -309,5 +346,47 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             tts.shutdown();
             tts = null;
         }
+    }
+
+    private TimerTask timerTaskMaker(){
+        return new TimerTask() {
+            public void run() {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        mCounter++;
+                        Log.d("mCounter", String.valueOf(mCounter));
+                        //you can do stuffs here say  like if (mCounter==15) { do something}
+                        if (mCounter == 2){
+                            binding.waitingCountLayout.setVisibility(View.VISIBLE);
+                            binding.keyPadLayout.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }};
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        printToast("pause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        printToast("resume");
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        switch(action) {
+            case MotionEvent.ACTION_DOWN :    //화면을 터치했을때
+                mCounter = 0;
+                binding.waitingCountLayout.setVisibility(View.GONE);
+                binding.keyPadLayout.setVisibility(View.VISIBLE);
+
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }

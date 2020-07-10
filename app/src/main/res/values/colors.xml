@@ -13,4 +13,5 @@
     <color name="colorDivider">#DDDDDD</color>
     <color name="colorBlue">#005CFF</color>
     <color name="colorPurple">#513a63</color>
+    <color name="translucent_black">#99FFFFFF</color>
 </resources>
