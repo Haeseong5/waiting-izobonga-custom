@@ -16,8 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="#F5DFDF"
-            android:scaleType="center" />
+            android:visibility="gone"
+            android:background="#F5DFDF"/>
+        <VideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
         <LinearLayout
             android:id="@+id/waiting_count_layout"
             android:layout_width="wrap_content"
@@ -25,20 +31,21 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
             android:orientation="vertical">
-            <TextView
+            <ImageView
                 android:id="@+id/waiting_customer_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="현재 웨이팅"
-                android:fontFamily="@font/font_style"
-                style="@style/DefaultTextViewStyle"/>
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:src="@drawable/now_waiting"/>
+
             <TextView
                 android:id="@+id/waiting_count_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="0 팀"
+                android:textSize="70sp"
+                android:text="0팀"
                 android:fontFamily="@font/font_style"
                 style="@style/DefaultTextViewStyle"/>
         </LinearLayout>
@@ -69,16 +76,16 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
                 <ImageView
-                    android:layout_width="0dp"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/private_permission"/>
+                    android:src="@drawable/private_permission" />
+
                 <CheckBox
                     android:id="@+id/waiting_check_box_agree"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:button="@drawable/checkbox_selector"
                     android:checked="false" />
             </LinearLayout>
@@ -87,6 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,24 +103,24 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:id="@+id/btn1"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn1_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn2"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn2_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn3"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn3_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
@@ -125,24 +133,24 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:id="@+id/btn4"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn4_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn5"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn5_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn6"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn6_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
@@ -155,24 +163,24 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:id="@+id/btn7"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn7_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn8"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn8_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn9"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn9_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
@@ -185,24 +193,24 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:id="@+id/btn_cancel"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn_cancel_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn0"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn0_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"
                         android:paddingHorizontal="5dp"/>
                     <ImageView
                         android:id="@+id/btn_input"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/btn_input_click_selector"
                         android:onClick="@{(v)->clickCallback.onClick(v)}"
                         android:paddingVertical="5dp"

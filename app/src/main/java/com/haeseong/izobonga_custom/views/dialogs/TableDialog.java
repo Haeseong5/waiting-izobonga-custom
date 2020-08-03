@@ -40,7 +40,6 @@ public class TableDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        hideSoftKey();
         //다이얼로그 밖의 화면은 흐리게 만들어줌
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
@@ -50,6 +49,7 @@ public class TableDialog extends Dialog {
         setContentView(R.layout.dialog_table);
         setCancelable(false);
 
+        hideSoftKey();
 
         mBtnPrevious = findViewById(R.id.table_bt_previous);
         mBtnNext = findViewById(R.id.table_bt_next);
@@ -113,6 +113,8 @@ public class TableDialog extends Dialog {
     }
 
     public void dismissDialog(){
+        cbTable4.setChecked(false);
+        cbTable6.setChecked(false);
         dismiss();
     }
     public void hideSoftKey(){

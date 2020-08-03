@@ -46,7 +46,6 @@ public class PersonnelDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        hideSoftKey();
         //다이얼로그 밖의 화면은 흐리게 만들어줌
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
@@ -55,6 +54,7 @@ public class PersonnelDialog extends Dialog {
 
         setContentView(R.layout.dialog_personnel);
         setCancelable(false);
+        hideSoftKey();
 
         //initView
         mIvPlus = findViewById(R.id.personnel_minus);
@@ -116,4 +116,6 @@ public class PersonnelDialog extends Dialog {
         newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
     }
+
+
 }

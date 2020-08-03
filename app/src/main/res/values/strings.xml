@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">이조본가</string>
     <string name="loading">로딩중입니다.</string>
-    <string name="tts_message">[이조본가]\n%s번 고객님. 입장해주세요.</string>
-    <string name="sms_message">[이조본가]\n웨이팅 번호 %s번 고객님.\n오래 기다리셨죠? 지금 입장해주세요!</string>
+    <string name="tts_message">%s번 고객님. 입장해주세요.</string>
+    <string name="sms_message">[이조본가]\n대기번호 %s번 고객님.\n오래 기다리셨죠? 지금 입장해주세요!</string>
+    <string name="sms_message2">[이조본가]\n안녕하세요. 이조본가입니다.\n예약해주셔서 감사합니다.\n고객님의 대기번호는 %s번 입니다.</string>
+
     <string name="no_customer">현재 대기 중인 고객님이 없습니다.</string>
     <string name="call_title">현재 대기 중인 고객</string>
     <string name="manager_title">전체 대기 고객 조회</string>

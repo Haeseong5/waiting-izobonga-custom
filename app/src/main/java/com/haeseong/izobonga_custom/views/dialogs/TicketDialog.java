@@ -30,7 +30,6 @@ public class TicketDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        hideSoftKey();
         //다이얼로그 밖의 화면은 흐리게 만들어줌
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
@@ -38,6 +37,8 @@ public class TicketDialog extends Dialog {
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         setContentView(R.layout.dialog_ticket);
+        hideSoftKey();
+
         tvWaitingNumber = findViewById(R.id.waiting_dialog_number);
         mPositiveButton = findViewById(R.id.waiting_dialog_finish);
         mIvTitle = findViewById(R.id.waiting_dialog_title);

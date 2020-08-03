@@ -2,6 +2,8 @@ package com.haeseong.izobonga_custom.views.activities;
 
 import androidx.databinding.DataBindingUtil;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
@@ -29,6 +31,7 @@ import java.util.TimerTask;
 
 public class WaitingActivity extends BaseActivity implements WaitingActivityView {
     private final String TAG = WaitingActivity.class.getName();
+    private final int PERIOD_TIME = 30000;
     FireBaseHelper firebaseHelper;
     ActivityWaitingBinding binding;
     ArrayList<String> numbers;
@@ -55,7 +58,15 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         binding.setActivity(this);
 
         //set background image
-        Glide.with(this).load(R.raw.background_gif).into(binding.waitingIvBackground);
+//        Glide.with(this).load(R.raw.ezgif).into(binding.waitingIvBackground);
+        binding.videoView.setVideoURI(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.video_background));
+        binding.videoView.start();
+        binding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+            }
+        });
 
         firebaseHelper = new FireBaseHelper();
         setWaitingListener(); //FireStore Change Listener
@@ -73,7 +84,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
 
 //        //타이머 생성
         mTimerTask = timerTaskMaker();
-        mTimer.schedule(mTimerTask, 0, 3000);
+        mTimer.schedule(mTimerTask, 0, PERIOD_TIME);
 
         if (tts == null){
             tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -85,6 +96,10 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         }
     }
 
+    private void trySendSMS(String phoneNumber, String message, int ticket){
+        WaitingService waitingService = new WaitingService(this);
+        waitingService.sendSMS(phoneNumber, message, ticket);
+    }
     private void tryWaiting(int personnelNumber, int childNumber, boolean table6){
         WaitingService waitingService = new WaitingService(WaitingActivity.this);
         waitingService.increaseWaitingCount(
@@ -92,18 +107,21 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                 binding.waitingEtNumberBox.getText().toString(),
                 personnelNumber,
                 childNumber,
-                table6);
+                table6
+        );
     }
     private View.OnClickListener ticketListener = new View.OnClickListener() {
         public void onClick(View v) {
             mTicketDialog.dismiss();
             mTicketDialog = null;
+
             binding.waitingEtNumberBox.setText("010-");
             binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
             binding.keyPadLayout.setVisibility(View.VISIBLE);
             //타이머재생성
             mTimerTask = timerTaskMaker();
-            mTimer.schedule(mTimerTask, 0, 3000);
+            mTimer.schedule(mTimerTask, 0, PERIOD_TIME);
+
         }
     };
 
@@ -157,7 +175,8 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             binding.keyPadLayout.setVisibility(View.VISIBLE);
             //타이머재생성
             mTimerTask = timerTaskMaker();
-            mTimer.schedule(mTimerTask, 0, 3000);
+            mTimer.schedule(mTimerTask, 0, PERIOD_TIME);
+
         }
     };
 
@@ -187,9 +206,10 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mTotalDialog.setCancelable(false);
             mTotalDialog.setCanceledOnTouchOutside(false);
             mTotalDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
+        }else{
+            mTotalDialog.mTvNumber.setText("0");
         }
-        mTotal = 0;
-        mTotalDialog.show();
+        mTotalDialog.show(); //WindowLeaked Error that was originally added here
     }
     private void showChildDialog(){
         if (mChildDialog == null){
@@ -197,8 +217,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mChildDialog.setCancelable(false);
             mChildDialog.setCanceledOnTouchOutside(false);
             mChildDialog.getWindow().setBackgroundDrawableResource(R.color.translucent_black);
+        }else{
+            mChildDialog.mTvNumber.setText("0");
         }
-        mChild = 0;
         mChildDialog.show();
     }
     private void showTableDialog(){
@@ -281,6 +302,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                             printToast("잘 못된 휴대폰 번호입니다. 다시 입력해주세요.");
                         }else{
                             binding.keyPadLayout.setVisibility(View.GONE);
+                            binding.waitingCountLayout.setVisibility(View.GONE);
                             mTimerTask.cancel(); //다이어로그 출력전 타이머 정지
                             showTotalDialog();
                         }
@@ -292,21 +314,22 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         }
     };
 
+
     @Override
-    public void validateSuccess(String message, int ticket) {
+    public void validateSuccess(String message, int ticket, String phoneNumber) {
         hideProgressDialog();
         if (mChildDialog != null  && mChildDialog.isShowing()){
-                mChildDialog.dismissDialog();
+            mChildDialog.dismissDialog();
         }
         if (mTotalDialog != null  && mTotalDialog.isShowing()){
             mTotalDialog.dismissDialog();
         }
         if (mTableDialog != null  && mTableDialog.isShowing()){
-            mTableDialog.cbTable4.setChecked(false);
-            mTableDialog.cbTable6.setChecked(false);
             mTableDialog.dismissDialog();
         }
         showTicketDialog(ticket);
+        message = getString(R.string.sms_message2);
+        trySendSMS(phoneNumber, message, ticket);
     }
 
     @Override
@@ -337,6 +360,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -359,6 +383,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                         if (mCounter == 2){
                             binding.waitingCountLayout.setVisibility(View.VISIBLE);
                             binding.keyPadLayout.setVisibility(View.GONE);
+                            binding.waitingEtNumberBox.setText("010-");
                         }
                     }
                 });

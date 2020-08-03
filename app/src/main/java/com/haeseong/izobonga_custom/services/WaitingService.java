@@ -1,5 +1,6 @@
 package com.haeseong.izobonga_custom.services;
 
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -91,7 +92,7 @@ public class WaitingService {
     }
 
     //고객 정보 등록
-    public void addData(Timestamp time, String phone, int personnel, final int ticket, int child, boolean table6) {
+    public void addData(Timestamp time, final String phone, int personnel, final int ticket, int child, boolean table6) {
         Customer customer = new Customer();
         customer.setTimestamp(time);
         customer.setPhone(phone);
@@ -107,7 +108,7 @@ public class WaitingService {
                         Log.d(TAG,
                                 "DocumentSnapshot written with ID: " + documentReference.getId());
                         setDocID(COLLECTION_CUSTOMER, documentReference.getId());
-                        mWaitingActivityView.validateSuccess("success", ticket);
+                        mWaitingActivityView.validateSuccess("success", ticket, phone);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -207,5 +208,18 @@ public class WaitingService {
                     }
                 });
     }
+    public void sendSMS(String phoneNumber, String message, int ticket){
+        try {
 
+            String msg = String.format(message, ticket);
+            //전송
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, msg, null, null);
+//            mWaitingActivityView.validateSuccessSMS("메세지 전송 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+//            mWaitingActivityView.validateFailureSMS("메세지 전송 실패. 없는 번호 입니다.");
+
+        }
+    }
 }
