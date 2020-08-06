@@ -21,7 +21,7 @@
         <activity
             android:name="com.haeseong.izobonga_custom.views.activities.WaitingActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/NoStatusBar" />
+            android:theme="@style/NoStatusBar"/>
         <activity android:name="com.haeseong.izobonga_custom.views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

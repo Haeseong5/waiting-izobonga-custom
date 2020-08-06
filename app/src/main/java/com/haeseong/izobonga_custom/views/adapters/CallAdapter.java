@@ -1,7 +1,6 @@
 package com.haeseong.izobonga_custom.views.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.haeseong.izobonga_custom.R;
 import com.haeseong.izobonga_custom.models.Customer;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -53,11 +50,12 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.MyViewHolder> 
         holder.tvPhone.setText(customers.get(position).getPhone());
         holder.tvPersonnel.setText(String.valueOf(customers.get(position).getPersonnel()));
         holder.tvChild.setText(String.valueOf(customers.get(position).getChild()));
-
+        holder.tvIndex.setText(String.valueOf(position+1));
         if (!customers.get(position).isTable6()){
             holder.tvTable.setText(context.getString(R.string.table4));
         }else{
             holder.tvTable.setText(context.getString(R.string.table6));
+            holder.tvTable.setTextColor(context.getColor(R.color.colorBlue));
         }
 
         holder.btDelete.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +89,7 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.MyViewHolder> 
         TextView tvPhone;
         TextView tvPersonnel;
         TextView tvChild;
+        TextView tvIndex;
         Button btCall;
         Button btDelete;
         TextView tvTable;
@@ -103,7 +102,7 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.MyViewHolder> 
             btCall = itemLayoutView.findViewById(R.id.item_customer_call_button);
             btDelete = itemLayoutView.findViewById(R.id.item_customer_delete_button);
             tvTable = itemLayoutView.findViewById(R.id.item_customer_table);
-
+            tvIndex = itemLayoutView.findViewById(R.id.item_customer_index);
             btCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

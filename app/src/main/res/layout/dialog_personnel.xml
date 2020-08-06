@@ -58,12 +58,16 @@
                 android:id="@+id/personnel_previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/dialog_previous"/>
             <Button
                 android:id="@+id/personnel_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/dialog_next"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>
 </LinearLayout>

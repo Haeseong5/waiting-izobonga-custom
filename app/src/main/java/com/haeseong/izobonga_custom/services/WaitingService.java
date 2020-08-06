@@ -219,7 +219,6 @@ public class WaitingService {
         } catch (Exception e) {
             e.printStackTrace();
 //            mWaitingActivityView.validateFailureSMS("메세지 전송 실패. 없는 번호 입니다.");
-
         }
     }
 }

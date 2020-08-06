@@ -19,5 +19,7 @@
     <string name="waiting_message">휴대폰 번호를 입력하시면 \n문자로 알려드립니다.</string>
     <string name="table4">4인 테이블 이용</string>
     <string name="table6">6인 테이블 이용</string>
+    <string name="default_phone_number">010-</string>
+    <string name="check_dialog_message">"%d순위. 대기번호 %d번\n성인: %d명, 아동 %d명\n%d인 테이블 이용"</string>
 
 </resources>

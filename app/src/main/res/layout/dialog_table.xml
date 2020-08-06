@@ -53,11 +53,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="32dp"
                     android:fontFamily="@font/nanumsquare_ac_b"
                     android:gravity="center"
                     android:text="00"
-                    android:textColor="@color/colorBlack" />
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
             </FrameLayout>
             <CheckBox
@@ -93,8 +94,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="32dp"
                     android:gravity="center"
+                    android:textSize="18sp"
                     android:fontFamily="@font/nanumsquare_ac_b"
                     android:textColor="@color/colorBlack"
                     android:text="00"/>
@@ -120,11 +122,15 @@
                 android:id="@+id/table_bt_previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/dialog_previous"/>
             <Button
                 android:id="@+id/table_bt_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/dialog_next"
                 android:layout_alignParentEnd="true" />
 

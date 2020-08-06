@@ -1,10 +1,8 @@
 package com.haeseong.izobonga_custom.views.dialogs;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,16 +10,11 @@ import androidx.annotation.NonNull;
 
 import com.haeseong.izobonga_custom.R;
 
-import java.util.Objects;
-
-public class CheckDialog extends Dialog {
+public class CheckDialog extends BaseDialog {
 
     private View.OnClickListener nextButtonListener;
     private View.OnClickListener preButtonListener;
-    TextView tvTitle;
-    TextView tvSub;
-    Button btCancel;
-    Button btCheck;
+    public TextView tvContent;
 
     public CheckDialog(@NonNull Context context, View.OnClickListener positiveListener, View.OnClickListener preButtonListener) {
         super(context);
@@ -32,16 +25,15 @@ public class CheckDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        layoutParams.dimAmount = 0.8f;
-        Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         setContentView(R.layout.dialog_check);
         setCancelable(false);
-
         //initView
-//        btCancel = findViewById(R.id.check_iv_cancel);
-//        btCheck = findViewById(R.id.check_bt_check);
+        Button btCancel = findViewById(R.id.check_dialog_bt_cancel);
+        Button btCall = findViewById(R.id.check_dialog_bt_call);
+        tvContent = findViewById(R.id.check_dialog_tv_content);
+
+        btCall.setOnClickListener(nextButtonListener);
+        btCancel.setOnClickListener(preButtonListener);
     }
 }

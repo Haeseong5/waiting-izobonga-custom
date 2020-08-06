@@ -4,39 +4,51 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/layout_border"
     android:gravity="center_horizontal">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:src="@drawable/dialog_ticket_text"/>
-        <TextView
-            android:id="@+id/waiting_dialog_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="99"
-            android:textSize="80sp"
-            android:textStyle="bold"
+            android:text="대기손님 호출"
             android:textColor="@color/colorBlack"
-            android:layout_marginVertical="10dp"/>
-        <ImageView
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/check_dialog_tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:src="@drawable/dialog_ticket_sub_text"/>
+            android:gravity="center"
+            android:text="Content"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:layout_marginVertical="20dp"
+            android:paddingHorizontal="20dp"/>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/check_iv_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/dialog_finish"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/check_dialog_bt_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_white"
+            android:text="취소"
+            android:textSize="15sp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/check_dialog_bt_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_blue"
+            android:text="호출"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 </LinearLayout>

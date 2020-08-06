@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +22,8 @@ import com.haeseong.izobonga_custom.models.Customer;
 import com.haeseong.izobonga_custom.services.CallService;
 import com.haeseong.izobonga_custom.views.adapters.CallAdapter;
 import com.gun0912.tedpermission.TedPermission;
+import com.haeseong.izobonga_custom.views.dialogs.CheckDialog;
+import com.haeseong.izobonga_custom.views.dialogs.PersonnelDialog;
 
 import java.util.ArrayList;
 
@@ -32,6 +36,8 @@ public class CallActivity extends BaseActivity implements CallActivityView{
     Toolbar mToolbar;
     CallAdapter adapter;
     ArrayList<Customer> customers;
+    CheckDialog mCheckDialog;
+    int mSelectedPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +81,10 @@ public class CallActivity extends BaseActivity implements CallActivityView{
 
             @Override
             public void onItemClickCall(View v, int position) {
-                showProgressDialog();
-                tryCallCustomer(customers.get(position).getDocID(), position); //docID, index
+//                showProgressDialog();
+//                tryCallCustomer(customers.get(position).getDocID(), position); //docID, index
+                mSelectedPosition = position;
+                showCheckDialog();
             }
 
             @Override
@@ -87,12 +95,41 @@ public class CallActivity extends BaseActivity implements CallActivityView{
         });
     }
 
+    private void showCheckDialog(){
+        if (mCheckDialog == null) {
+            Log.d("showTotalDialog", "null");
+            mCheckDialog = new CheckDialog(CallActivity.this, nextOnClickListener, preOnClickListener);
+            mCheckDialog.setCancelable(false);
+            mCheckDialog.setCanceledOnTouchOutside(false);
+        }
+        mCheckDialog.show();
+        formattingMessage();
+    }
+
+    private View.OnClickListener preOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (mCheckDialog != null && mCheckDialog.isShowing()){
+                mCheckDialog.dismiss();
+                mCheckDialog = null;
+            }
+        }
+    };
+
+    private View.OnClickListener nextOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+                showProgressDialog();
+                tryCallCustomer(customers.get(mSelectedPosition).getDocID(), mSelectedPosition); //docID, index
+        }
+    };
+
     public void setZeroDataMessage(){
         if (customers.size()==0){
             tvNoCustomerText.setVisibility(View.VISIBLE);
         }else{
             tvNoCustomerText.setVisibility(View.GONE);
         }
+        if (getSupportActionBar()!=null)
+            getSupportActionBar().setTitle(getString(R.string.call_title)+" "+customers.size()+"명");
     }
     //웨이팅 고객 초기화. onCreate()에서 호출됨.
     public void tryInitWaitingCustomer() {
@@ -137,13 +174,21 @@ public class CallActivity extends BaseActivity implements CallActivityView{
         }
     }
 
-    private void checkPermission() {
-        TedPermission.with(this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("호출 메세지를 전송하기 위해 SMS전송 접근 권한이 필요해요")
-                .setDeniedMessage("왜 거부하셨어요...\n하지만 [설정] > [권한] 에서 권한을 허용할 수 있어요.")
-                .setPermissions(Manifest.permission.SEND_SMS)
-                .check();
+    private void formattingMessage(){
+        boolean isTable6 =  customers.get(mSelectedPosition).isTable6();
+        int table;
+        if (isTable6){
+            table = 6;
+        }else{
+            table = 4;
+        }
+        String message = String.format(getString(R.string.check_dialog_message),
+                mSelectedPosition+1,
+                customers.get(mSelectedPosition).getTicket(),
+                customers.get(mSelectedPosition).getPersonnel(),
+                customers.get(mSelectedPosition).getChild(),
+                table);
+        mCheckDialog.tvContent.setText(message);
     }
 
     @Override
@@ -154,7 +199,6 @@ public class CallActivity extends BaseActivity implements CallActivityView{
         setZeroDataMessage();
         hideProgressDialog();
     }
-
 
     //고객이 추가되었을 때 호출 됨.
     @Override
@@ -170,9 +214,14 @@ public class CallActivity extends BaseActivity implements CallActivityView{
     @Override
     public void called(int position) {
         tryCallSMS(customers.get(position).getPhone(), getString(R.string.sms_message), customers.get(position).getTicket(), position); //문자메세지 전송
+        //몇 분 내 입장 안하면 취소
         adapter.removeItem(position);
         setZeroDataMessage();
         adapter.notifyDataSetChanged();
+        if (mCheckDialog != null && mCheckDialog.isShowing()){
+            mCheckDialog.dismiss();
+            mCheckDialog = null;
+        }
         hideProgressDialog();
     }
 
@@ -234,5 +283,15 @@ public class CallActivity extends BaseActivity implements CallActivityView{
             mMediaPlayer = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        if (mCheckDialog != null && mCheckDialog.isShowing()) {
+            mCheckDialog.dismiss();
+            mCheckDialog = null;
+        }
+        hideProgressDialog();
+        super.onStop();
     }
 }

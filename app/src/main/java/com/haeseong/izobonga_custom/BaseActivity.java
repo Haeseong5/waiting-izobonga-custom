@@ -1,28 +1,36 @@
 package com.haeseong.izobonga_custom;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+import com.haeseong.izobonga_custom.views.dialogs.DialogDismisser;
+import com.haeseong.izobonga_custom.views.dialogs.LoadingDialog;
 
 import java.util.List;
 
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
-    public ProgressDialog mProgressDialog;
+    public LoadingDialog mProgressDialog;
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true); //무한진행상태 표시.
+            mProgressDialog = new LoadingDialog(this);
+//            mProgressDialog.setMessage(getString(R.string.loading));
+//            mProgressDialog.setIndeterminate(true); //무한진행상태 표시.
             mProgressDialog.setCancelable(true);
             mProgressDialog.setCanceledOnTouchOutside(false);
         }
@@ -34,41 +42,33 @@ public class BaseActivity extends AppCompatActivity {
     다이얼로그 창을 표시할 Activity가 없기 때문에 안드로이드 런타임이 나쁜 토큰(Bad Token1))이라는 예외를 던진다.
      */
 
+    public void checkPermission() {
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("호출 메세지를 전송하기 위해 SMS전송 접근 권한이 필요해요")
+                .setDeniedMessage("왜 거부하셨어요...\n하지만 [설정] > [권한] 에서 권한을 허용할 수 있어요.")
+                .setPermissions(Manifest.permission.SEND_SMS)
+                .check();
+    }
+
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+            DialogDismisser.dismiss(mProgressDialog);
+            mProgressDialog = null;
         }
     }
 
-    public void hideStatusBar(){
-        if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }else{
-            View decorView = getWindow().getDecorView();
-            // Hide the status bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }
+    public void setFullScreen(){
+        View decoView = getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                |View.SYSTEM_UI_FLAG_FULLSCREEN
+                |View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decoView.setSystemUiVisibility(uiOptions);
     }
 
-
-    public void hideSoftKey(){
-
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
-        if (isImmersiveModeEnabled) {
-            Log.i("Is on?", "Turning immersive mode mode off. ");
-        } else {
-            Log.i("Is on?", "Turning immersive mode mode on.");
-        }
-
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-    }
     public void onClickListener(View view){
 
     }
