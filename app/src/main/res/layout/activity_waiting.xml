@@ -46,8 +46,17 @@
                 android:layout_marginTop="5dp"
                 android:textSize="70sp"
                 android:text="0팀"
+                android:layout_marginBottom="30dp"
                 android:fontFamily="@font/font_style"
                 style="@style/DefaultTextViewStyle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="화면을 터치해주세요."
+                android:fontFamily="@font/font_style"
+                android:textColor="@color/colorWhite"/>
         </LinearLayout>
 
         <LinearLayout
@@ -62,10 +71,10 @@
                 android:id="@+id/waiting_et_number_box"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
-                android:paddingHorizontal="5dp"
+                android:paddingHorizontal="10dp"
                 android:inputType="phone"
+                android:textSize="20sp"
                 android:background="@drawable/number_edit_text"
                 android:text="@string/default_phone_number"
                 android:textColor="@color/colorWhite"
@@ -79,15 +88,22 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="260dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/private_permission" />
 
                 <CheckBox
                     android:id="@+id/waiting_check_box_agree"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/checkbox_selector"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerCrop"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="5dp"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/checkbox_selector"
                     android:checked="false" />
             </LinearLayout>
 
@@ -219,5 +235,28 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/waitingTvTicketsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:text="대기손님 현황: "
+                android:fontFamily="@font/nanumsquare_ac_r" />
+            <TextView
+                android:id="@+id/waitingTvTickets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:layout_toRightOf="@+id/waitingTvTicketsTitle"
+                android:fontFamily="@font/nanumsquare_ac_r" />
+        </RelativeLayout>
     </FrameLayout>
 </layout>

@@ -2,6 +2,7 @@ package com.haeseong.izobonga_custom.views.activities;
 
 import androidx.databinding.DataBindingUtil;
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -266,9 +267,12 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         printLog(TAG, message);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void modified(long size, int table4, int table6) {
-        binding.waitingCountText.setText(size + "팀");
+    public void modified(ArrayList<String> tickets, int table4, int table6) {
+        binding.waitingCountText.setText(tickets.size() + "팀");
+
+        binding.waitingTvTickets.setText(listToString(tickets));
         this.table4 = table4;
         this.table6 = table6;
     }
@@ -364,6 +368,11 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mCounter = 0;
             if(v == null)
                 return;
+            String temp = Objects.requireNonNull(binding.waitingEtNumberBox.getText()).toString();
+            if (temp.length()>3 && !temp.contains("-")){
+                //길이가 4가 넘는데 -가 포함 안되어 있다면,,
+                binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
+            }
             switch(v.getId()) {
                 case R.id.btn1:
                     binding.waitingEtNumberBox.append("1");
@@ -396,13 +405,17 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                     binding.waitingEtNumberBox.append("0");
                     break;
                 case R.id.btn_cancel:
-                    int length = binding.waitingEtNumberBox.getText().length();
+                    int length = 0;
+                    if (binding.waitingEtNumberBox.getText() != null)
+                        length = binding.waitingEtNumberBox.getText().length();
                     if (length > 2){
                         binding.waitingEtNumberBox.getText().delete(length - 1, length);
                     }
                     break;
                 case R.id.btn_input:
-                    String phoneNumber = binding.waitingEtNumberBox.getText().toString();
+                    String phoneNumber = null;
+                    if (binding.waitingEtNumberBox.getText() != null)
+                        phoneNumber = binding.waitingEtNumberBox.getText().toString();
                     boolean isCheck = binding.waitingCheckBoxAgree.isChecked();
                     if (isCheck){
                         if(!FireBaseHelper.isValidCellPhoneNumber(phoneNumber)){ //휴대폰 번호 유효성 거증
@@ -466,5 +479,15 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     private void resetEditText(){
         binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number)); //번호 초기화
         binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
+    }
+    private String listToString(ArrayList<String> list){
+        StringBuilder sb = new StringBuilder();
+        for (int i= list.size()-1; i>-1; i--){
+            if (sb.length() > 0){
+                sb.append(", ");
+            }
+            sb.append(list.get(i));
+        }
+        return sb.toString();
     }
 }

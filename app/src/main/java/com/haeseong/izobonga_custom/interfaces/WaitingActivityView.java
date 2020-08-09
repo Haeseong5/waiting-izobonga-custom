@@ -1,11 +1,13 @@
 package com.haeseong.izobonga_custom.interfaces;
 
+import java.util.ArrayList;
+
 public interface WaitingActivityView {
     void validateSuccess(String message, int ticket, String phoneNumber);
 
     void validateFailure(String message);
 
-    void modified(long size, int table4, int table6);
+    void modified(ArrayList<String> ticketList, int table4, int table6);
 
     void speak(String ticket);
 }

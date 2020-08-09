@@ -186,7 +186,7 @@ public class WaitingService {
                                     }else {
                                         table4++;
                                     }
-                                    mWaitingActivityView.modified(mTicketList.size(), table4, table6);
+                                    mWaitingActivityView.modified(mTicketList, table4, table6);
                                     break;
                                 case REMOVED: //고객 호출되었을 때
                                     Log.d(TAG, "Removed CUSTOMER: " + dc.getDocument().getData());
@@ -197,7 +197,7 @@ public class WaitingService {
                                     }else {
                                         table4--;
                                     }
-                                    mWaitingActivityView.modified(mTicketList.size(), table4, table6);
+                                    mWaitingActivityView.modified(mTicketList, table4, table6);
                                     mWaitingActivityView.speak(String.valueOf(removedCustomer.getTicket()));
                                     break;
                                 default:
