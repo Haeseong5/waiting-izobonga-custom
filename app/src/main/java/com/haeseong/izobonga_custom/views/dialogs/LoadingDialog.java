@@ -36,7 +36,7 @@ public class LoadingDialog extends BaseDialog {
         setContentView(R.layout.dialog_loading);
         setFullscreen(true);
         ImageView ivLoading = findViewById(R.id.loading_image);
-        ivLoading.setImageResource(R.drawable.ic_launcher_background); //로딩 이미지 설정
+//        ivLoading.setImageResource(R.drawable.loading_bar); //로딩 이미지 설정
         Animation anim = AnimationUtils.loadAnimation(context, R.anim.loading_anim_rotation); //회전 애니메이션
         ivLoading.setAnimation(anim); //로딩이미지에 회전 애니메이션 설정
     }

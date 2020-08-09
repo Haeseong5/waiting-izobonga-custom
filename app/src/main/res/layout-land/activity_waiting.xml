@@ -46,8 +46,17 @@
                 android:layout_marginTop="5dp"
                 android:textSize="70sp"
                 android:text="0팀"
+                android:layout_marginBottom="30dp"
                 android:fontFamily="@font/font_style"
                 style="@style/DefaultTextViewStyle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="화면을 터치해주세요."
+                android:fontFamily="@font/font_style"
+                android:textColor="@color/colorWhite"/>
         </LinearLayout>
 
         <LinearLayout

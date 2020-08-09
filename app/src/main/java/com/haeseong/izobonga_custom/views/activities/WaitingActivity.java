@@ -24,8 +24,10 @@ import com.haeseong.izobonga_custom.views.dialogs.TableDialog;
 import com.haeseong.izobonga_custom.views.dialogs.TicketDialog;
 import com.google.firebase.Timestamp;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +36,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     private final String TAG = WaitingActivity.class.getName();
     private final int PERIOD_TIME = 30000;
     private int currentPosition = 0;
+
 
     FireBaseHelper firebaseHelper;
     ActivityWaitingBinding binding;
@@ -47,7 +50,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     int table4, table6;
     int mChild;
     int mTotal;
-
+    int mNow;
     //타이머
     Handler mHandler = new Handler();
     int mCounter =0;
@@ -64,20 +67,18 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         binding.setActivity(this);
         checkPermission();
 
-        binding.videoView.setVideoURI(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.video_background));
-        binding.videoView.start();
-        binding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setLooping(true);
-            }
-        });
+        try {
+            mNow = compareTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        setBackground();
 
         firebaseHelper = new FireBaseHelper();
         setWaitingListener(); //FireStore Change Listener
         numbers = new ArrayList<>();
-
-//        binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
+        binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
         binding.waitingEtNumberBox.setEnabled(false); //editText 사용 불가능하게 만들기
         binding.waitingEtNumberBox.setFocusable(false);
 
@@ -117,9 +118,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     }
     private View.OnClickListener ticketListener = new View.OnClickListener() {
         public void onClick(View v) {
-            binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number));
-            binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
-            binding.keyPadLayout.setVisibility(View.VISIBLE);
+            resetEditText();
+            setVisibilityLayout(View.VISIBLE, View.GONE);
+
             //타이머재생성
             mTimerTask = timerTaskMaker();
             mTimer.schedule(mTimerTask, 0, PERIOD_TIME);
@@ -173,7 +174,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mTotal = 0;
             dismissDialog();
             binding.keyPadLayout.setVisibility(View.VISIBLE);
-            binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number));
+            resetEditText();
             //타이머재생성
             mTimerTask = timerTaskMaker();
             mTimer.schedule(mTimerTask, 0, PERIOD_TIME);
@@ -314,7 +315,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
                         mCounter++;
                         if (mCounter == 2){
                             setVisibilityLayout(View.VISIBLE, View.GONE); //대기인원 노출
-                            binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number)); //번호 초기화
+                            resetEditText();
                         }
                     }
                 });
@@ -343,17 +344,15 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
-        switch(action) {
-            case MotionEvent.ACTION_DOWN :    //화면을 터치했을때
-                mCounter = 0;
-                if (mTotalDialog == null && mChildDialog == null && mTableDialog == null && mTicketDialog == null){
-                    setVisibilityLayout(View.GONE, View.VISIBLE); // 다이어로그가 생성되지 않은 초기화면에서 이벤트 적용
-                }else{
-                    if (mTotalDialog != null && !mTotalDialog.isShowing() && !mChildDialog.isShowing() && !mTableDialog.isShowing() && !mTicketDialog.isShowing()){
-                        setVisibilityLayout(View.GONE, View.VISIBLE); //다이어로그가 보여지고 있지 않을 때 이벤트 적용
-                    }
+        if (action == MotionEvent.ACTION_DOWN) {    //화면을 터치했을때
+            mCounter = 0;
+            if (mTotalDialog == null && mChildDialog == null && mTableDialog == null && mTicketDialog == null) {
+                setVisibilityLayout(View.GONE, View.VISIBLE); // 다이어로그가 생성되지 않은 초기화면에서 이벤트 적용
+            } else {
+                if (mTotalDialog != null && !mTotalDialog.isShowing() && !mChildDialog.isShowing() && !mTableDialog.isShowing() && !mTicketDialog.isShowing()) {
+                    setVisibilityLayout(View.GONE, View.VISIBLE); //다이어로그가 보여지고 있지 않을 때 이벤트 적용
                 }
-                break;
+            }
         }
         return super.onTouchEvent(event);
     }
@@ -365,59 +364,48 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mCounter = 0;
             if(v == null)
                 return;
-
             switch(v.getId()) {
                 case R.id.btn1:
                     binding.waitingEtNumberBox.append("1");
-                    appendHyphen();
                     break;
                 case R.id.btn2:
                     binding.waitingEtNumberBox.append("2");
-                    appendHyphen();
                     break;
                 case R.id.btn3:
                     binding.waitingEtNumberBox.append("3");
-                    appendHyphen();
                     break;
                 case R.id.btn4:
                     binding.waitingEtNumberBox.append("4");
-                    appendHyphen();
                     break;
                 case R.id.btn5:
                     binding.waitingEtNumberBox.append("5");
-                    appendHyphen();
                     break;
                 case R.id.btn6:
                     binding.waitingEtNumberBox.append("6");
-                    appendHyphen();
                     break;
                 case R.id.btn7:
                     binding.waitingEtNumberBox.append("7");
-                    appendHyphen();
                     break;
                 case R.id.btn8:
                     binding.waitingEtNumberBox.append("8");
-                    appendHyphen();
                     break;
                 case R.id.btn9:
                     binding.waitingEtNumberBox.append("9");
-                    appendHyphen();
-                    break;
-                case R.id.btn_cancel:
-                    int length = binding.waitingEtNumberBox.getText().length();
-                    if (length > 4) {
-                        binding.waitingEtNumberBox.getText().delete(length - 1, length);
-                    }
                     break;
                 case R.id.btn0:
                     binding.waitingEtNumberBox.append("0");
-                    appendHyphen();
+                    break;
+                case R.id.btn_cancel:
+                    int length = binding.waitingEtNumberBox.getText().length();
+                    if (length > 2){
+                        binding.waitingEtNumberBox.getText().delete(length - 1, length);
+                    }
                     break;
                 case R.id.btn_input:
                     String phoneNumber = binding.waitingEtNumberBox.getText().toString();
                     boolean isCheck = binding.waitingCheckBoxAgree.isChecked();
                     if (isCheck){
-                        if(phoneNumber.length() != 13){
+                        if(!FireBaseHelper.isValidCellPhoneNumber(phoneNumber)){ //휴대폰 번호 유효성 거증
                             printToast("잘 못된 휴대폰 번호입니다. 다시 입력해주세요.");
                         }else{
                             mTimerTask.cancel(); //다이어로그 출력전 타이머 정지
@@ -432,9 +420,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         }
     };
 
-    private void setVisibilityLayout(int x, int y){
-        binding.waitingCountLayout.setVisibility(x);
-        binding.keyPadLayout.setVisibility(y);
+    private void setVisibilityLayout(int waiting, int key){
+        binding.waitingCountLayout.setVisibility(waiting);
+        binding.keyPadLayout.setVisibility(key);
     }
 
     private void dismissDialog(){
@@ -456,12 +444,27 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         }
     }
 
-    private void appendHyphen(){
-        Log.d("LENGTH", String.valueOf(binding.waitingEtNumberBox.getText().toString().length()));
-        if (binding.waitingEtNumberBox.getText().toString().length() == 3){
-            binding.waitingEtNumberBox.append("-");
-        } else if (binding.waitingEtNumberBox.getText().toString().length() == 8){
-            binding.waitingEtNumberBox.append("-");
+    private void setBackground(){
+        int videoURI;
+        if (mNow <= 1){
+            videoURI = R.raw.video_background_morning;
+        }else if(mNow == 2){
+            videoURI = R.raw.video_background_sunset;
+        }else{
+            videoURI = R.raw.video_background_night;
         }
+        binding.videoView.setVideoURI(Uri.parse("android.resource://"+getPackageName()+"/"+videoURI));
+        binding.videoView.start();
+        binding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+            }
+        });
+    }
+
+    private void resetEditText(){
+        binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number)); //번호 초기화
+        binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
     }
 }

@@ -5,8 +5,9 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/loading_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/loading_bar"
         android:background="@android:color/transparent"/>
 
 </LinearLayout>

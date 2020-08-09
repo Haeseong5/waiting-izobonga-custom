@@ -20,7 +20,11 @@ import com.gun0912.tedpermission.TedPermission;
 import com.haeseong.izobonga_custom.views.dialogs.DialogDismisser;
 import com.haeseong.izobonga_custom.views.dialogs.LoadingDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
@@ -68,6 +72,33 @@ public class BaseActivity extends AppCompatActivity {
                 |View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decoView.setSystemUiVisibility(uiOptions);
     }
+
+    public int compareTime() throws ParseException {
+        SimpleDateFormat dateFormat = new  SimpleDateFormat("HH:mm", Locale.KOREA);
+        long now = System.currentTimeMillis();
+        Date nowDate = new Date(now);
+        int result=0;
+        String currDateStr = dateFormat.format(nowDate);
+        Date currDate = dateFormat.parse(currDateStr);
+
+        //낮 08-16 노을 16-18 밤 18-05 노을 05-08
+        Date date1 = dateFormat.parse("08:00");
+        Date date2 = dateFormat.parse("16:00");
+        Date date3 = dateFormat.parse("19:00");
+        if (currDate != null) {
+            if (currDate.after(date1) && currDate.before(date2)) { //현재 시간이 8시 이후
+                result = 1; //낮
+            }else if(currDate.after(date2) && currDate.before(date3)){ //현재 시간이 16시 이후
+                result = 2; //노을
+            }else if (currDate.after(date3)){ // 현재 시간이 19시 이후
+                result = 3; //밤
+            }else{
+                result = 4;
+            }
+        }
+        return result;
+    }
+
 
     public void onClickListener(View view){
 
