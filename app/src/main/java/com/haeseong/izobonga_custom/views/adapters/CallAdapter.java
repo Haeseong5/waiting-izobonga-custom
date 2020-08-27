@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class CallAdapter extends RecyclerView.Adapter<CallAdapter.MyViewHolder> {
     private ArrayList<Customer> customers;
     // 리스너 객체 참조를 저장하는 변수
-    public OnItemClickListener mListener = null;
+    private OnItemClickListener mListener = null;
     private Context context;
     public CallAdapter(Context context, ArrayList<Customer> customers) {
         this.customers = customers;

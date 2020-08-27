@@ -34,7 +34,7 @@ import static com.haeseong.izobonga_custom.FireBaseHelper.COLLECTION_MANAGER;
 public class WaitingService {
     private final String TAG = "WaitingService";
     private final WaitingActivityView mWaitingActivityView;
-    private ArrayList<String> mTicketList = new ArrayList<>(); //웨이팅 중인 고객 수 관리 하기 위한 List.
+    private ArrayList<Integer> mTicketList = new ArrayList<>(); //웨이팅 중인 고객 수 관리 하기 위한 List.
     private int table6 = 0;
     private int table4 = 0;
     public WaitingService(final WaitingActivityView waitingActivityView) {
@@ -180,7 +180,7 @@ public class WaitingService {
                                 case ADDED: //초기화 시 호출됨. + 고객 추가
                                     Log.d(TAG, "Added Customer: " + dc.getDocument().getData());
                                     Customer addedCustomer = dc.getDocument().toObject(Customer.class);
-                                    mTicketList.add(String.valueOf(addedCustomer.getTicket()));
+                                    mTicketList.add(addedCustomer.getTicket());
                                     if (addedCustomer.isTable6()){
                                         table6++;
                                     }else {

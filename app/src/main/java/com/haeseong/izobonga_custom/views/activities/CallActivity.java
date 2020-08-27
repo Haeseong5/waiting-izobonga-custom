@@ -154,7 +154,11 @@ public class CallActivity extends BaseActivity implements CallActivityView{
     private void tryDelete(final String docID, final int position) {
         showProgressDialog();
         CallService callService = new CallService(this);
-        callService.deleteCustomer(docID, position);
+        if(docID != null){
+            callService.deleteCustomer(docID, position);
+        }else{
+            printToast("오류가 발생했습니다.");
+        }
     }
     //대기고객 호출하기 버튼 누르면 DB에서 아이템 제거 후 리스트 갱신.
     private void tryResetTicket() {

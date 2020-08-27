@@ -35,7 +35,7 @@ public class BaseActivity extends AppCompatActivity {
             mProgressDialog = new LoadingDialog(this);
 //            mProgressDialog.setMessage(getString(R.string.loading));
 //            mProgressDialog.setIndeterminate(true); //무한진행상태 표시.
-            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCancelable(false);
             mProgressDialog.setCanceledOnTouchOutside(false);
         }
         mProgressDialog.show();
@@ -81,10 +81,9 @@ public class BaseActivity extends AppCompatActivity {
         String currDateStr = dateFormat.format(nowDate);
         Date currDate = dateFormat.parse(currDateStr);
 
-        //낮 08-16 노을 16-18 밤 18-05 노을 05-08
         Date date1 = dateFormat.parse("08:00");
         Date date2 = dateFormat.parse("16:00");
-        Date date3 = dateFormat.parse("19:00");
+        Date date3 = dateFormat.parse("18:00");
         if (currDate != null) {
             if (currDate.after(date1) && currDate.before(date2)) { //현재 시간이 8시 이후
                 result = 1; //낮

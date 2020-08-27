@@ -25,7 +25,7 @@
                 android:id="@+id/personnel_minus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_left_selector"
+                android:src="@drawable/ic_remove_24px"
                 />
             <TextView
                 android:id="@+id/child_number"
@@ -41,7 +41,7 @@
                 android:id="@+id/child_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_right_selector" />
+                android:src="@drawable/ic_add_black_24dp" />
         </LinearLayout>
 
         <RelativeLayout

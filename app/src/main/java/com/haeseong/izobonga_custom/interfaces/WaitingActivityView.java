@@ -7,7 +7,7 @@ public interface WaitingActivityView {
 
     void validateFailure(String message);
 
-    void modified(ArrayList<String> ticketList, int table4, int table6);
+    void modified(ArrayList<Integer> ticketList, int table4, int table6);
 
     void speak(String ticket);
 }

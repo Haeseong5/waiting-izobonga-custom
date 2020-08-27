@@ -12,6 +12,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.haeseong.izobonga_custom.BaseActivity;
 import com.haeseong.izobonga_custom.FireBaseHelper;
@@ -27,6 +28,8 @@ import com.google.firebase.Timestamp;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -134,8 +137,8 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         public void onClick(View v) {
             String personnelNumber = mTotalDialog.mTvNumber.getText().toString();
             mTotal = Integer.parseInt(personnelNumber);
-            if ( mTotal < 2){
-                printToast("2인 이상부터 예약 가능합니다,");
+            if ( mTotal < 1){
+                printToast("1인 이상부터 예약 가능합니다,");
             }else {
                 mTotalDialog.hide();
                 showChildDialog();
@@ -144,11 +147,12 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     };
 
     //아동 인원 수 선택 Dialog 다음 버튼 클릭 시 이벤트 처리
+    //버튼 계속눌림
     private View.OnClickListener childNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             mChild = Integer.parseInt(mChildDialog.mTvNumber.getText().toString());
+            mChildDialog.dismissDialog();
             if (mTotal+mChild>4){
-                mChildDialog.hide();
                 showTableDialog();
             }else{
                 showProgressDialog();
@@ -160,9 +164,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
     private View.OnClickListener tableNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (mTableDialog.cbTable4.isChecked() || mTableDialog.cbTable6.isChecked()){
-                showProgressDialog();
-                mTableDialog.hide();
                 boolean table = mTableDialog.cbTable6.isChecked();
+                dismissDialog();
+                showProgressDialog();
                 tryWaiting(mTotal, mChild, table);
             } else{
                 printToast("테이블을 선택해주세요!");
@@ -219,6 +223,8 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             mChildDialog = new PersonnelDialog(WaitingActivity.this, childNextListener, childPreListener, getDrawable(R.drawable.child_dialog_text));
             mChildDialog.setCancelable(false);
             mChildDialog.setCanceledOnTouchOutside(false);
+            mChildDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+
         }else{
             mChildDialog.mTvNumber.setText("0");
         }
@@ -269,9 +275,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void modified(ArrayList<String> tickets, int table4, int table6) {
+    public void modified(ArrayList<Integer> tickets, int table4, int table6) {
         binding.waitingCountText.setText(tickets.size() + "팀");
-
+        Collections.sort(tickets);
         binding.waitingTvTickets.setText(listToString(tickets));
         this.table4 = table4;
         this.table6 = table6;
@@ -331,6 +337,7 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             currentPosition = binding.videoView.getCurrentPosition();
             binding.videoView.pause();
         }
+        printToast("onPause");
         super.onPause();
     }
 
@@ -350,12 +357,9 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         int action = event.getAction();
         if (action == MotionEvent.ACTION_DOWN) {    //화면을 터치했을때
             mCounter = 0;
-            if (mTotalDialog == null && mChildDialog == null && mTableDialog == null && mTicketDialog == null) {
-                setVisibilityLayout(View.GONE, View.VISIBLE); // 다이어로그가 생성되지 않은 초기화면에서 이벤트 적용
-            } else {
-                if (mTotalDialog != null && !mTotalDialog.isShowing() && !mChildDialog.isShowing() && !mTableDialog.isShowing() && !mTicketDialog.isShowing()) {
-                    setVisibilityLayout(View.GONE, View.VISIBLE); //다이어로그가 보여지고 있지 않을 때 이벤트 적용
-                }
+            if (mTotalDialog == null && mChildDialog == null &&
+                    mTableDialog == null && mTicketDialog == null && mProgressDialog == null) {
+                setVisibilityLayout(View.GONE, View.VISIBLE); // 다이어로그가 생성되지 않은 초기화면에서 터치하면 키패드 활성화
             }
         }
         return super.onTouchEvent(event);
@@ -455,6 +459,10 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
             DialogDismisser.dismiss(mTicketDialog);
             mTicketDialog = null;
         }
+        if (mProgressDialog != null){
+            DialogDismisser.dismiss(mProgressDialog);
+            mProgressDialog = null;
+        }
     }
 
     private void setBackground(){
@@ -480,13 +488,13 @@ public class WaitingActivity extends BaseActivity implements WaitingActivityView
         binding.waitingEtNumberBox.setText(getString(R.string.default_phone_number)); //번호 초기화
         binding.waitingEtNumberBox.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //입력하면 phone number form 으로 만들기
     }
-    private String listToString(ArrayList<String> list){
+    private String listToString(ArrayList<Integer> list){
         StringBuilder sb = new StringBuilder();
-        for (int i= list.size()-1; i>-1; i--){
+        for (int item: list){
             if (sb.length() > 0){
                 sb.append(", ");
             }
-            sb.append(list.get(i));
+            sb.append(item);
         }
         return sb.toString();
     }
